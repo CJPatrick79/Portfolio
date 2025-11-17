@@ -2,7 +2,7 @@
 #include <omp.h>
 #include <iomanip>
 using namespace std;
-/*
+
 double f(double x) {
     return 4.0 / (1.0 + x * x);
 }
@@ -58,4 +58,5 @@ int main() {
     }
 cout << "That took " << Final_time << endl;
     return 0;
+
 }

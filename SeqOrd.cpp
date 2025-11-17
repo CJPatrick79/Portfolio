@@ -7,17 +7,15 @@ using namespace std;
 int main() {
     int max_threads = omp_get_max_threads();
     omp_set_num_threads(max_threads);
-    omp_set_nested(1);  // Enable nested parallelism (OpenMP 3.0+)
+    omp_set_nested(1);
 
-    volatile int current_id = 0;  // Used to control sequential access
+    volatile int current_id = 0;
 
-    double start_time = omp_get_wtime();  // Start timing
+    double start_time = omp_get_wtime();
 
 #pragma omp parallel shared(current_id)
     {
         int tid = omp_get_thread_num();
-
-        // --- Sequential Print Control ---
         while (tid != current_id) {
 #pragma omp flush(current_id)
         }
@@ -31,14 +29,12 @@ int main() {
         current_id++;
 #pragma omp flush(current_id)
 
-        // --- Barrier: Ensure all threads print before proceeding ---
 #pragma omp barrier
 
-// --- Nested Parallel Region ---
 #pragma omp parallel
         {
             int nested_tid = omp_get_thread_num();
-            int parent_tid = tid;  // Still in outer scope
+            int parent_tid = tid;
 
 #pragma omp critical
             {
@@ -53,3 +49,4 @@ int main() {
 
     return 0;
 }
+
